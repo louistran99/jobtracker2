@@ -1,0 +1,91 @@
+# Source of truth for the Xcode project. Run `make generate` after editing;
+# JobTracker.xcodeproj is generated and not committed.
+name: JobTracker
+
+options:
+  bundleIdPrefix: com.louistran
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+    GCC_TREAT_WARNINGS_AS_ERRORS: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    ENABLE_MODULE_VERIFIER: YES
+    DEAD_CODE_STRIPPING: YES
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+packages:
+  JobTrackerKit:
+    path: Packages/JobTrackerKit
+
+targets:
+  JobTracker:
+    type: application
+    platform: iOS
+    sources:
+      - App
+    dependencies:
+      - package: JobTrackerKit
+        products: [Domain, Storage, Features]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.louistran.JobTracker
+        PRODUCT_NAME: JobTracker
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Job Tracker
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
+
+  JobTrackerUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - UITests
+    dependencies:
+      - target: JobTracker
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.louistran.JobTrackerUITests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: JobTracker
+
+schemes:
+  JobTracker:
+    build:
+      targets:
+        JobTracker: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - package: JobTrackerKit/Domain
+        - package: JobTrackerKit/Storage
+        - package: JobTrackerKit/DesignSystem
+        - package: JobTrackerKit/Features
+      targets:
+        - package: JobTrackerKit/DomainTests
+          parallelizable: true
+        - package: JobTrackerKit/StorageTests
+          parallelizable: true
+        - package: JobTrackerKit/DesignSystemTests
+          parallelizable: true
+        - package: JobTrackerKit/FeaturesTests
+          parallelizable: true
+        - name: JobTrackerUITests
+    archive:
+      config: Release
