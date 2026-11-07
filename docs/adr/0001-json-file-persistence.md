@@ -1,6 +1,6 @@
 # 1. Store applications in a versioned JSON file
 
-- Status: Accepted
+- Status: Accepted, amended by [ADR 2](0002-application-model-v2.md)
 - Date: 2026-11-06
 - Ticket: KAN-70
 
