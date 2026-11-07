@@ -12,7 +12,7 @@ struct NewApplicationViewModelTests {
 
         let viewModel = NewApplicationViewModel(store: store, now: { now })
 
-        #expect(viewModel.draft == ApplicationDraft(stage: .applied, appliedOn: now))
+        #expect(viewModel.draft == ApplicationDraft(stage: .applied, appliedOn: CalendarDate(now)))
         #expect(!viewModel.canAdd)
         #expect(!viewModel.hasChanges)
     }
@@ -45,7 +45,7 @@ struct NewApplicationViewModelTests {
             company: "Stripe",
             role: "EM",
             stage: .screening,
-            appliedOn: now,
+            appliedOn: CalendarDate(now),
             createdAt: now
         )
         #expect(store.applications == [expected])

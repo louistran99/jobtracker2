@@ -24,7 +24,7 @@ public final class NewApplicationViewModel: Identifiable {
         self.store = store
         self.now = now
         self.makeID = makeID
-        let draft = ApplicationDraft(appliedOn: now())
+        let draft = ApplicationDraft(appliedOn: CalendarDate(now()))
         self.draft = draft
         self.initialDraft = draft
     }

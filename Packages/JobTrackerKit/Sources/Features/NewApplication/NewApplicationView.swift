@@ -30,7 +30,8 @@ struct NewApplicationView: View {
                             .submitLabel(.done)
                     }
                     StagePicker(selection: $viewModel.draft.stage)
-                    DatePicker("Applied on", selection: $viewModel.draft.appliedOn, displayedComponents: .date)
+                    DatePicker(
+                        "Applied on", selection: $viewModel.draft.appliedOn.startDate, displayedComponents: .date)
                 }
             }
             .navigationTitle("New Application")

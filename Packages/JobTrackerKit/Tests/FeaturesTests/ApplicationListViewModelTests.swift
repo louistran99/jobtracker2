@@ -28,11 +28,12 @@ struct ApplicationListViewModelTests {
         #expect(viewModel.canAddApplication)
     }
 
-    @Test func listsMostRecentlyAppliedFirstThenByCompany() async {
-        let day: TimeInterval = 86_400
-        let older = makeApplication(company: "Spotify", appliedOn: Date(timeIntervalSince1970: 0))
-        let newerB = makeApplication(company: "stripe", appliedOn: Date(timeIntervalSince1970: day))
-        let newerA = makeApplication(company: "Airbnb", appliedOn: Date(timeIntervalSince1970: day))
+    @Test func listsMostRecentlyAppliedFirstThenByCompany() async throws {
+        let olderDay = try #require(CalendarDate(year: 2026, month: 10, day: 31))
+        let newerDay = try #require(CalendarDate(year: 2026, month: 11, day: 3))
+        let older = makeApplication(company: "Spotify", appliedOn: olderDay)
+        let newerB = makeApplication(company: "stripe", appliedOn: newerDay)
+        let newerA = makeApplication(company: "Airbnb", appliedOn: newerDay)
         let (store, _) = await makeLoadedStore([older, newerB, newerA])
 
         guard case .list(let rows) = ApplicationListViewModel(store: store).content else {
