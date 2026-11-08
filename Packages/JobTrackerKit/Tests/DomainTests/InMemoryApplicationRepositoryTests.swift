@@ -10,7 +10,7 @@ struct InMemoryApplicationRepositoryTests {
             company: "Ramp",
             role: "EM",
             stage: .applied,
-            appliedOn: date,
+            appliedOn: CalendarDate(date, in: .gmt),
             createdAt: date
         )
         let repository = InMemoryApplicationRepository()

@@ -53,6 +53,20 @@ public final class ApplicationStore {
         mutate { $0.append(application) }
     }
 
+    /// Replaces the saved application that has the same ID. Does nothing if
+    /// it no longer exists, so an edit can't bring back a deleted application.
+    public func update(_ application: Application) {
+        guard let index = applications.firstIndex(where: { $0.id == application.id }) else { return }
+        guard applications[index] != application else { return }
+        mutate { $0[index] = application }
+    }
+
+    /// Deletes the application with `id`. Does nothing if there isn't one.
+    public func delete(id: Application.ID) {
+        guard applications.contains(where: { $0.id == id }) else { return }
+        mutate { $0.removeAll { $0.id == id } }
+    }
+
     public func clearSaveError() {
         saveError = nil
     }

@@ -34,9 +34,16 @@ func makeApplication(
     company: String = "Stripe",
     role: String = "EM",
     stage: Stage = .applied,
-    appliedOn: Date = Date(timeIntervalSince1970: 1_800_000_000)
+    appliedOn: CalendarDate = CalendarDate(Date(timeIntervalSince1970: 1_800_000_000), in: .gmt)
 ) -> Application {
-    Application(id: UUID(), company: company, role: role, stage: stage, appliedOn: appliedOn, createdAt: appliedOn)
+    Application(
+        id: UUID(),
+        company: company,
+        role: role,
+        stage: stage,
+        appliedOn: appliedOn,
+        createdAt: Date(timeIntervalSince1970: 1_800_000_000)
+    )
 }
 
 @MainActor
