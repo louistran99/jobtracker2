@@ -51,7 +51,7 @@ file and leaves it untouched.
 - **Next step duration or format** (the "30 min" in the Summary mockup). Not in
   the acceptance criteria; the title carries it ("Onsite loop, 4 rounds").
 - **Saving the posting's location, workplace type, and date** shown under the
-  link in A2 and A5. They come from fetching the posting, a later ticket, and
+  link in A2. They come from fetching the posting, a later ticket, and
   can be added as optional fields then.
 - **`updatedAt`.** No screen shows it.
 
