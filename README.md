@@ -72,3 +72,37 @@ Decisions are recorded in [`docs/adr`](docs/adr).
   live next to each module in `Packages/JobTrackerKit/Tests`, and run in parallel.
 - UI tests (`UITests/`) cover the main flows against seeded in-memory data.
 - Swift 6 language mode, and warnings are errors.
+
+## Agent skills
+
+AI coding skills live in `.agents/skills/<name>/SKILL.md`, and that folder is
+the only copy. Each skill's folder name must equal the `name` in its
+frontmatter.
+
+| Tool | How it finds the skills |
+|---|---|
+| Codex | Reads `.agents/skills` directly |
+| Cursor | Reads `.agents/skills` directly |
+| Claude Code | Reads `.claude/skills`, a committed symlink to `../.agents/skills` |
+
+`make skills` creates or repairs the symlink (it does nothing if the link is
+already right), and `make lint` fails if the link or any skill is broken. To
+support another tool, add its link path to `LINKS` in
+`scripts/link-agent-skills.sh`.
+
+### Check that each tool sees the skills
+
+Do this with `job_tracker` as the working directory or workspace root. The
+expected skills are `database-expert`, `principal-engineer`, and
+`ui-ux-expert`.
+
+1. **Script:** run `make skills` twice (the second run prints nothing), then
+   `make lint` (prints `agent skills OK`).
+2. **Claude Code:** run `claude` in this directory and type `/skills`. All
+   three should be listed as project skills.
+3. **Cursor:** open this folder as the workspace, then go to Cursor Settings
+   → Rules and check that all three skills are listed. In a new Agent chat,
+   type `/` and the skills should appear.
+4. **Codex:** run `codex` in this directory and type `/skills`. All three
+   should be listed. For a non-interactive check, run
+   `codex exec "list your available skills"`.

@@ -22,14 +22,15 @@ define run_tests
 	exit $$status
 endef
 
-.PHONY: help bootstrap generate open format lint build test ui-test check clean
+.PHONY: help bootstrap generate open format lint skills build test ui-test check clean
 
 help:
 	@echo "bootstrap  Install pinned tools into .tools/"
 	@echo "generate   Generate $(PROJECT) from project.yml"
 	@echo "open       Generate and open the project in Xcode"
 	@echo "format     Format all Swift sources in place"
-	@echo "lint       Check formatting and lint rules (fails on any finding)"
+	@echo "lint       Check formatting, lint rules, and agent skills (fails on any finding)"
+	@echo "skills     Link .agents/skills for every supported AI tool"
 	@echo "build      Build the app for the simulator"
 	@echo "test       Run unit tests"
 	@echo "ui-test    Run UI tests"
@@ -54,6 +55,10 @@ format:
 
 lint:
 	xcrun swift-format lint --strict --recursive --parallel $(SWIFT_PATHS)
+	scripts/link-agent-skills.sh --check
+
+skills:
+	scripts/link-agent-skills.sh
 
 build: generate
 	$(XCODEBUILD) build
