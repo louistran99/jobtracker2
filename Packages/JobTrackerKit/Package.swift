@@ -11,6 +11,7 @@ let package = Package(
     products: [
         .library(name: "Domain", targets: ["Domain"]),
         .library(name: "Storage", targets: ["Storage"]),
+        .library(name: "Networking", targets: ["Networking"]),
         .library(name: "DesignSystem", targets: ["DesignSystem"]),
         .library(name: "Features", targets: ["Features"]),
     ],
@@ -22,6 +23,10 @@ let package = Package(
         // Persistence adapters behind `ApplicationRepository`.
         .target(name: "Storage", dependencies: ["Domain"], swiftSettings: strictSettings),
         .testTarget(name: "StorageTests", dependencies: ["Storage"], swiftSettings: strictSettings),
+
+        // Network adapters behind Domain protocols, such as `JobPostingFetcher`.
+        .target(name: "Networking", dependencies: ["Domain"], swiftSettings: strictSettings),
+        .testTarget(name: "NetworkingTests", dependencies: ["Networking"], swiftSettings: strictSettings),
 
         // Reusable visual building blocks and tokens. No business logic.
         .target(name: "DesignSystem", dependencies: ["Domain"], swiftSettings: strictSettings),

@@ -59,7 +59,7 @@ public struct ApplicationDraft: Equatable, Sendable {
     /// Whether the link is empty or a web address, so the form can point out a
     /// bad link next to the field.
     public var isJobURLValid: Bool {
-        if case .invalid = parsedJobURL { false } else { true }
+        JobLink(parsing: jobURL) != .invalid
     }
 
     /// Builds the application to save, or `nil` when the draft is not valid.
@@ -67,7 +67,7 @@ public struct ApplicationDraft: Equatable, Sendable {
     public func makeApplication(id: UUID, createdAt: Date) -> Application? {
         guard isValid else { return nil }
         let jobURL: URL? =
-            switch parsedJobURL {
+            switch JobLink(parsing: jobURL) {
             case .valid(let url): url
             case .empty, .invalid: nil
             }
@@ -86,43 +86,6 @@ public struct ApplicationDraft: Equatable, Sendable {
             notes: notes.trimmed,
             createdAt: createdAt
         )
-    }
-}
-
-// MARK: - Job link
-
-extension ApplicationDraft {
-    private enum ParsedJobURL {
-        case empty
-        case valid(URL)
-        case invalid
-    }
-
-    /// Reads the link the way people type or paste one: surrounding whitespace
-    /// is ignored, and a link without a scheme, such as
-    /// `stripe.com/jobs/listing/6519024`, is taken to be https.
-    ///
-    /// Anything other than an http or https address with a host name, such as
-    /// `stripe.com`, is invalid.
-    private var parsedJobURL: ParsedJobURL {
-        let text = jobURL.trimmed
-        guard !text.isEmpty else { return .empty }
-        guard !text.contains(where: \.isWhitespace) else { return .invalid }
-
-        let hasScheme = text.range(of: "^[A-Za-z][A-Za-z0-9+.-]*://", options: .regularExpression) != nil
-        guard
-            let components = URLComponents(string: hasScheme ? text : "https://" + text),
-            let scheme = components.scheme?.lowercased(),
-            ["http", "https"].contains(scheme),
-            components.user == nil,
-            components.password == nil,
-            let host = components.host,
-            host.split(separator: ".").count >= 2,
-            let url = components.url
-        else {
-            return .invalid
-        }
-        return .valid(url)
     }
 }
 

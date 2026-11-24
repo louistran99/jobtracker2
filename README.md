@@ -39,19 +39,25 @@ View (SwiftUI, no logic)
             └─ ApplicationRepository (protocol)
                  ├─ JSONFileApplicationRepository (app)
                  └─ InMemoryApplicationRepository (previews, tests, UI tests)
+       └─ JobPostingFetcher (protocol)
+            ├─ URLSessionJobPostingFetcher (app)
+            └─ StubJobPostingFetcher (previews, UI tests)
 ```
 
 | Module (`Packages/JobTrackerKit`) | Contents | Depends on |
 |---|---|---|
-| `Domain` | Value types (`Application`, `Stage`, `ApplicationDraft`), pure logic (`PipelineStats`), the repository protocol. Foundation only. | — |
+| `Domain` | Value types (`Application`, `Stage`, `ApplicationDraft`, `JobLink`), pure logic (`PipelineStats`), the repository and fetcher protocols. Foundation only. | — |
 | `Storage` | `JSONFileApplicationRepository` | Domain |
+| `Networking` | `URLSessionJobPostingFetcher` | Domain |
 | `DesignSystem` | Stage colors, `CompanyAvatar`, `StageBadge`, `StagePicker`, `FormFieldRow`, `StatTile`, `IconTile` | Domain |
 | `Features` | `ApplicationStore`, then one folder per screen with its view and view model | Domain, DesignSystem |
 
 The app target (`App/`) is the composition root. `AppDependencies` is the only
 place that picks concrete implementations. Launching with `-ui-testing` swaps
-in seeded in-memory storage and turns off animations, so UI tests are
-deterministic.
+in in-memory storage and a stubbed network and turns off animations, so UI
+tests are deterministic. `-seed-sample-data` starts with the sample
+applications, and in debug builds `-screen job-link` opens the job link field
+on its own (temporary, until it is part of the New Application sheet).
 
 Conventions:
 

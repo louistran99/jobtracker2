@@ -33,7 +33,7 @@ targets:
       - App
     dependencies:
       - package: JobTrackerKit
-        products: [Domain, Storage, Features]
+        products: [Domain, Storage, Networking, Features]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.louistran.JobTracker
@@ -75,12 +75,15 @@ schemes:
       coverageTargets:
         - package: JobTrackerKit/Domain
         - package: JobTrackerKit/Storage
+        - package: JobTrackerKit/Networking
         - package: JobTrackerKit/DesignSystem
         - package: JobTrackerKit/Features
       targets:
         - package: JobTrackerKit/DomainTests
           parallelizable: true
         - package: JobTrackerKit/StorageTests
+          parallelizable: true
+        - package: JobTrackerKit/NetworkingTests
           parallelizable: true
         - package: JobTrackerKit/DesignSystemTests
           parallelizable: true
