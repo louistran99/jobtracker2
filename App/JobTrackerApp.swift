@@ -3,13 +3,20 @@ import SwiftUI
 
 @main
 struct JobTrackerApp: App {
-    @State private var rootViewModel = AppDependencies.makeRootViewModel(
+    @State private var screen = AppDependencies.makeScreen(
         configuration: LaunchConfiguration(arguments: ProcessInfo.processInfo.arguments)
     )
 
     var body: some Scene {
         WindowGroup {
-            RootView(viewModel: rootViewModel)
+            switch screen {
+            case .root(let viewModel):
+                RootView(viewModel: viewModel)
+            #if DEBUG
+                case .jobLinkHarness(let store, let fetcher):
+                    JobLinkHarnessView(store: store, fetcher: fetcher)
+            #endif
+            }
         }
     }
 }
